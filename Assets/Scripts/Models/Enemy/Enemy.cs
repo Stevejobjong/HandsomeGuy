@@ -10,7 +10,7 @@ public enum EnemyState
     Dead,
 }
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviourPunCallbacks
 {
     #region Properties
 
@@ -119,6 +119,8 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
         FindTarget();
 
         // 일정 시간마다 가장 가까운 플레이어를 찾아감
@@ -127,10 +129,13 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
         if (target != null && _agent != null)
         {
             Debug.Log(_agent);
             _agent.SetDestination(target.position);
+            _agent.isStopped = false;
 
             bool isTargetOnLeft = target.position.x < transform.position.x;
             _enemySpriteRenderer.flipX = isTargetOnLeft;
@@ -139,6 +144,8 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
         StopTargetUpdate();
     }
 

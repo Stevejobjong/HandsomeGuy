@@ -44,7 +44,10 @@ public class ObjectManager: MonoBehaviourPunCallbacks
 
         else if (type == typeof(Enemy))
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return null;
             //GameObject obj = Main.ResourceManager.Instantiate($"Enemy.prefab", pooling: true);
+
             GameObject obj = Main.ResourceManager.GetResource<GameObject>("Enemy.prefab");
             GameObject go = Main.PoolManager.Pop(obj.gameObject);
             go.transform.position = position;
@@ -58,6 +61,8 @@ public class ObjectManager: MonoBehaviourPunCallbacks
 
         else if (type == typeof(Boss))
         {
+            if (!PhotonNetwork.IsMasterClient)
+                return null;
             //GameObject obj = Main.ResourceManager.Instantiate($"Boss.prefab", pooling: true);
             GameObject obj = Main.ResourceManager.GetResource<GameObject>("Boss.prefab");
             GameObject go = Main.PoolManager.Pop(obj.gameObject);
